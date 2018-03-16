@@ -1,0 +1,87 @@
+body{
+	width: 900px;
+	margin: auto;
+}
+#myc{
+	float: left;
+}
+#myc1{
+	float: right;
+	margin-top: 30px;
+}
+#myc1 a{
+	text-decoration: none;
+}
+.clear{
+	clear: both;
+}
+ul li{
+	display: inline;
+}
+ul a{
+	text-decoration: none;
+	
+}
+#myc2{
+	background-color: #00BFFF;
+	height: 50px;
+	padding-top: 8px;
+}
+.myc3{
+	width: 900px;
+}
+#myd{
+	width: 25%;
+	float: left;
+}
+#myd1{
+	width:75%;
+	float: left;
+}
+.myd2{
+	float: left;
+	text-align: center;
+	width: 25%;
+}
+.myd2 p{
+	margin-top: 0px;
+}
+#myd3 a{
+	margin-right: 30px;
+	text-decoration: none;
+}
+#myd3{
+	text-align: center;
+	font-family: "微软雅黑";
+	font-size: 15px;
+	height: 50px;
+}
+#myd3 a:link{
+				color: black;	
+			}
+			#myd3  a:visited{
+				color: black;	
+			}
+			#myd3 a:hover{
+				color:#999;	
+			}
+			#myd3 a:active{
+				color:cadetblue;	
+			}
+#myd4{
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+ul a:link{
+				color: black;	
+			}
+			ul  a:visited{
+				color: black;	
+			}
+			ul a:hover{
+				color:#999;	
+			}
+			ul a:active{
+				color:cadetblue;	
+			}

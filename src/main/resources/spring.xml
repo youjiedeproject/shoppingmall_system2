@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+    	http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+    	http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.3.xsd
+    	http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+    	http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+        ">
+           
+    <context:component-scan base-package="com.qianfeng"></context:component-scan>
+           
+           
+	<!-- 加载propertiesyywr -->
+	<context:property-placeholder location="classpath:db.properties"/>
+	<!-- 数据源 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+       <property name="driverClass" value="${db.driverClass}"/>
+       <property name="jdbcUrl" value="${db.url}"/>
+       <property name="user" value="${db.user}"/>
+       <property name="password" value="${db.password}"/>
+
+	</bean>   
+
+	<!-- SqlSessioFactory -->
+	 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+       <!-- 数据源-->
+       <property name="dataSource" ref="dataSource" />
+       <!-- 加载mybatis的全局配置文件 -->
+       <property name="configLocation" value="classpath:mybatis-config.xml" />
+    </bean>
+	
+	<!-- 创建Mapper代理对像 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--扫描mapper包中的接口-->
+        <property name="basePackage" value="com.qianfeng.mapper"></property>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+	<!-- 事务管理 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    	<!-- 数据源 -->
+    	<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+</beans>

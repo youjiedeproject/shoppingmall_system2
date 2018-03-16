@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--映射接口-->
+<mapper namespace="com.qianfeng.mapper.UserMapper">
+    <sql id="ResultItems">
+       p.pid,p.pname,p.market_price,p.shop_price,p.pimage,p.pdate,p.is_hot,p.pdesc,p.cid,c.cname,
+         CASE  p.status
+		WHEN 1 THEN "正常"
+		WHEN 2 THEN "下架"
+		WHEN 3 THEN "删除"
+		ELSE "未知" END as statusName
+    </sql>
+    <sql id="where_items">
+        <where>
+            p.status!=3
+            <if test="q!=null and q.title!=null and q.title !=''">
+                and p.pname like '%${q.title}%'
+            </if>
+        </where>
+    </sql>
+    <select id="selectByName" parameterType="User" resultType="User" >
+            select * from user where username=#{username}
+    </select>
+    <select id="selectAllCategory"  resultType="Category" >
+        select * from category
+    </select>
+    <select id="selectCount"  resultType="Integer" parameterType="Search" >
+        select count(*) from  product 
+         <where>
+             <if test="pname!=null and pname!=''">
+                and pname like '%${pname}%'
+             </if>
+             <if  test="cid!=null and cid!=''">
+                 and cid =#{cid}
+             </if>
+         </where>
+    </select>
+    <select id="selectPage"  resultType="Product" parameterType="Search" >
+        select * from  product
+         <where>
+             <if  test="pname!=null and pname!=''">
+                and pname like '%${pname}%'
+             </if>
+             <if  test="cid!=null and cid!=''">
+                 and cid =#{cid}
+             </if>
+         </where>
+        limit #{pageIndex},#{currentCount}
+    </select>
+<insert id="insertAll" parameterType="User">
+    insert into user (username,password,eamil,telephone) VALUES  (#{username},#{password},#{email},#{telephone})
+</insert>
+    <select id="selectProductById" resultType="Product">
+        select * from product  where pid=#{pid}
+    </select>
+    <select id="selectAllItems" resultType="Product" >
+        select
+        <include refid="ResultItems" />
+        from product AS p left join category  as c on  p.cid=c.cid
+        <include refid="where_items" />
+        limit #{p.offset},#{p.limit}
+    </select>
+    <select id="selectItemsNum" resultType="Long" >
+        select count(1) from product p <include refid="where_items" />
+    </select>
+    <update id="updateStatusByIds" parameterType="Integer">
+        update product set status=3 where pid=#{id}
+    </update>
+    <select id="selectCategory" resultType="Category" parameterType="com.qianfeng.model.Page">
+        select
+        cid,cname,  CASE status
+		WHEN 1 THEN "正常"
+		WHEN 2 THEN "删除"
+		ELSE "未知" END as status
+        from  category
+        where status!=2
+        limit #{offset},#{limit}
+    </select>
+    <select id="selectCategoryNum" resultType="Long">
+        select count(1) from category where status !=3
+    </select>
+</mapper>

@@ -1,0 +1,29 @@
+body{
+	width:500px ;
+	margin: auto;
+	background-color: blanchedalmond;
+}
+.clear{
+	clear: both;
+}
+#myd{
+	font-family: "微软雅黑";	
+	font-size: 30px;
+	height: 50px;
+	text-align: center;
+	background-color: #999;
+}
+.myd2{
+	float: left;
+	width: 25%;
+}
+.myd3{
+	float: left;
+	width: 75%;
+}
+#myc{
+	text-align: center;
+}
+#myc input{
+	margin-right: 20px;
+}
