@@ -6,7 +6,51 @@ public class User {
     private String password;
     private String telephone;
     private String email;
-    private String auto;
+    private String  isadmin;
+    private String udate;
+    private String sex;
+    private String address;
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getIsadmin() {
+        return isadmin;
+    }
+
+    public void setIsadmin(String isadmin) {
+        this.isadmin = isadmin;
+    }
+
+    public String getUdate() {
+        return udate;
+    }
+
+    public void setUdate(String udate) {
+        this.udate = udate;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public Integer getUid() {
         return uid;
@@ -48,13 +92,7 @@ public class User {
         this.email = email;
     }
 
-    public String getAuto() {
-        return auto;
-    }
 
-    public void setAuto(String auto) {
-        this.auto = auto;
-    }
 
     public User() {
     }

@@ -6,7 +6,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>添加会员-后台管理系统-Admin 1.0</title>
+    <title>添加管理员-后台管理系统-Admin 1.0</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -30,7 +30,7 @@
             <div class="layui-input-inline">
                 <input type="text" id="username" name="username" lay-verify="required|username" autocomplete="off" class="layui-input">
             </div>
-           <span id="span1"></span>
+            <span id="span1"></span>
         </div>
         <div class="layui-form-item">
             <label for="sex" class="layui-form-label">性别</label>
@@ -123,11 +123,11 @@
         });
         //自定义验证规则
         form.verify({
-          /* username: function(value) {
-                if(value.length < 5) {
-                    return '昵称至少得5个字符啊';
-                }
-            },*/
+            /* username: function(value) {
+                  if(value.length < 5) {
+                      return '昵称至少得5个字符啊';
+                  }
+              },*/
             pass: [/(.+){6,12}$/, '密码必须6到12位'],
             repass: function(value) {
                 if($('#password').val() != $('#repass').val()) {
@@ -151,7 +151,7 @@
                 data: $("#addToForm").serialize(),
                 dataType: "text",
                 type: "post",
-                url: "${pageContext.request.contextPath}/user/useradd",
+                url: "${pageContext.request.contextPath}/user/adminadd",
                 success: function (res) {
                     if (res !=null) {
                         layer.alert("添加成功", {icon: 6}, function () {

@@ -32,22 +32,18 @@
         <i class="layui-icon" style="line-height:30px">ဂ</i></a>
 </div>
 <div class="weadmin-body">
-    <div class="weadmin-block">
+    <div class="weadmin-block demoTable">
         <button class="layui-btn layui-btn-danger" data-type="getCheckData"><i class="layui-icon">&#xe640;</i>批量删除</button>
-        <button class="layui-btn" onclick="WeAdminShow('添加分类','${pageContext.request.contextPath}/pages/article/category-add')"><i class="layui-icon"></i>添加</button>
-        <span class="fr" style="line-height:40px">共有数据：66 条</span>
+        <button class="layui-btn" onclick="WeAdminShow('添加用户','${pageContext.request.contextPath}/pages/article/categoryadd',600,400)"><i class="layui-icon">&#xe61f;</i>添加</button>
     </div>
 
     <div id="demo">
-        <table class="layui-hide" id="articleList"></table>
+        <table class="layui-hide" id="articleList" lay-filter="demo"></table>
         <script type="text/html" id="operateTpl">
-            <a title="编辑" onclick="WeAdminEdit('编辑','./edit', 2, 600, 400)" href="javascript:;">
+            <a title="编辑" lay-event="edit" href="javascript:;">
                 <i class="layui-icon">&#xe642;</i>
             </a>
-            <a title="查看" onclick="WeAdminShow('查看文章','./show',600,400)" href="javascript:;">
-                <i class="layui-icon">&#xe63c;</i>
-            </a>
-            <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
+            <a title="删除" id="category_del" onclick="category_del(this)" href="javascript:;">
                 <i class="layui-icon">&#xe640;</i>
             </a>
         </script>
@@ -99,10 +95,10 @@
                         $(".layui-table-body .layui-form-checked").parents('tr').remove();
                         var ids = [];
                         for(var i=0;i<data.length;i++){
-                            ids.push(data[i].pid)
+                            ids.push(data[i].cid)
                         }
                         $.post(
-                            "../../items/delete",
+                            "../../category/delete",
                             {"ids[]":ids},
                             function (date) {
                                 console.log(data)
@@ -113,35 +109,11 @@
                         });
                     });
                 } else {
-                    layer.msg("请先选择需要删除的文章！");
+                    layer.msg("请先选择需要删除的分类！");
                 }
 
             },
-            Recommend: function() {
-                var checkStatus = table.checkStatus('articleList'),
-                    data = checkStatus.data;
-                if(data.length > 0) {
-                    layer.msg("您点击了推荐操作");
-                    for(var i = 0; i < data.length; i++) {
-                        console.log("a:" + data[i].recommend);
-                        data[i].recommend = "checked";
-                        console.log("aa:" + data[i].recommend);
-                        form.render();
-                    }
 
-                } else {
-                    console.log("b");
-                    layer.msg("请先选择");
-                }
-
-                //$(".layui-table-body .layui-form-checked").parents('tr').children().children('input[name="zzz"]').attr("checked","checked");
-            },
-            Top: function() {
-                layer.msg("您点击了置顶操作");
-            },
-            Review: function() {
-                layer.msg(";");
-            }
 
         };
 
@@ -162,6 +134,44 @@
             });
         }
 
+        table.on('tool(demo)', function (obj) {
+            var data = obj.data //获得当前行数据
+                , layEvent = obj.event; //获得 lay-event 对应的值
+            if (layEvent === 'edit') {
+                var cid = data.cid;
+//               layer.msg(data.cid);
+                var title = "修改分类";
+                var url = "../../pages/article/categoryedit";
+                var w = ($(window).width() * 0.9);
+
+                var h = ($(window).height() - 50);
+
+
+                layer.open({
+                    type: 2,
+                    area: [w + 'px', h + 'px'],
+                    fix: false, //不固定
+                    maxmin: true,
+                    shadeClose: true,
+                    shade: 0.4,
+                    title: title,
+                    content: url,
+                    success: function (layero, index) {
+                        //向iframe页的id=house的元素传值  // 参考 https://yq.aliyun.com/ziliao/133150
+                        var body = layer.getChildFrame('body', index);
+                        //巧妙的地方在这里哦
+                        body.contents().find("#cname").val(data.cname);
+                        body.contents().find("#cid").val(data.cid);
+                    },
+                    error: function (layero, index) {
+                        alert("修改失败");
+                    }
+                });
+            }
+        });
+
+
+
     });
 
     function delAll(argument) {
@@ -175,6 +185,37 @@
         });
     }
 
+
+    /*商品-删除*/
+    window.category_del = function (obj) {
+        layer.confirm('确认要删除吗？', function (index) {
+            var id = $(obj).parents("tr").children("[data-field='cid']").text();
+            //提交ajax
+            var ids=[];
+            ids.push(id);
+            $.ajax({
+                data: {'ids[]': ids},
+                dataType: "text",
+                type: "POST",
+                url: "../../category/delete",
+                success: function (res) {
+                    if (res!=null) {
+                        $(obj).parents('tr').remove();
+                        layer.msg('已删除!', {
+                            icon: 1,
+                            time: 1000
+                        });
+                    } else {
+                        layer.msg('删除失败!', {
+                            icon: 2,
+                            time: 1000
+                        });
+                    }
+                }
+            });
+
+        });
+    }
 </script>
 
 </html>

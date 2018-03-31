@@ -5,11 +5,14 @@ import com.qianfeng.model.Category;
 import com.qianfeng.model.PageBean;
 import com.qianfeng.model.Product;
 import com.qianfeng.model.Search;
+import com.qianfeng.service.IBackGroundService;
 import com.qianfeng.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -19,6 +22,8 @@ import java.util.List;
 public class ProductAction {
 @Autowired
     private IUserService service;
+    @Autowired
+    private IBackGroundService service2;
     @RequestMapping(value="/")
     public String homePage(HttpSession session){
         List<Category> categoryList = service.selectAllCategory();
@@ -89,6 +94,35 @@ public class ProductAction {
         session.setAttribute("Product",Product);
         return "CheckProduct";
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/categorySelect", method = RequestMethod.GET)
+    public  List<Category>   categorySelect() {
+        List<Category> categoryList = service.selectAllCategory();
+        return categoryList;
+    }
+    @ResponseBody
+    @RequestMapping(value = "/product_edit", method = RequestMethod.POST)
+    public Integer  product_edit(Integer pid,String pname,Double marketprice,Double shopprice,Integer cid,Integer is_hot,String pdate,String productdesc,String statusName) {
+           Integer it=null;
+            Product product=new Product();
+            product.setCid(cid);
+            product.setIs_hot(is_hot);
+            product.setMarket_price(marketprice);
+            product.setPdate(pdate);
+            product.setShop_price(shopprice);
+            if("正常".equals(statusName)){
+                product.setStatus(1);
+            }else{
+                product.setStatus(2);
+            }
+            product.setPdesc(productdesc);
+            product.setPid(pid);
+            product.setPname(pname);
+         it = service2.updateProduct(product);
+        return it;
+    }
+
 }
 
 

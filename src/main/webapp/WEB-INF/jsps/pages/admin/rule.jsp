@@ -1,12 +1,11 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="UTF-8">
-    <title>权限管理-后台管理系统-Admin 1.0</title>
+    <title>管理员列表-后台管理系统-Admin 1.0</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -32,142 +31,154 @@
         <i class="layui-icon" style="line-height:30px">ဂ</i></a>
 </div>
 <div class="weadmin-body">
-    <div class="layui-row">
-        <form class="layui-form layui-col-md12 we-search layui-form-pane">
-            <div class="layui-input-inline">
-                <select name="cateid">
-                    <option>规则分类</option>
-                    <option>文章</option>
-                    <option>会员</option>
-                    <option>权限</option>
-                </select>
-            </div>
-            <div class="layui-input-inline">
-                <select name="contrller">
-                    <option>请控制器</option>
-                    <option>Index</option>
-                    <option>Goods</option>
-                    <option>Cate</option>
-                </select>
-            </div>
-            <div class="layui-input-inline">
-                <select name="action">
-                    <option>请方法</option>
-                    <option>add</option>
-                    <option>login</option>
-                    <option>checklogin</option>
-                </select>
-            </div>
-            <div class="layui-inline">
-                <input class="layui-input" placeholder="权限名" name="cate_name">
-            </div>
-            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon"></i>增加</button>
-        </form>
-    </div>
-    <div class="weadmin-block">
-        <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-        <span class="fr" style="line-height:40px">共有数据：88 条</span>
-    </div>
-    <table class="layui-table">
-        <thead>
-        <tr>
-            <th>
-                <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
-            </th>
-            <th>ID</th>
-            <th>权限规则</th>
-            <th>权限名称</th>
-            <th>所属分类</th>
-            <th>操作</th>
-        </thead>
-        <tbody>
-        <tr>
-            <td>
-                <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
-            </td>
-            <td>1</td>
-            <td>admin/user/userlist</td>
-            <td>会员列表</td>
-            <td>会员相关</td>
-            <td class="td-manage">
-                <a title="编辑" onclick="WeAdminShow('编辑','../404.html')" href="javascript:;">
-                    <i class="layui-icon">&#xe642;</i>
-                </a>
-                <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                    <i class="layui-icon">&#xe640;</i>
-                </a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <div class="page">
-        <div>
-            <a class="prev" href="">&lt;&lt;</a>
-            <a class="num" href="">1</a>
-            <span class="current">2</span>
-            <a class="num" href="">3</a>
-            <a class="num" href="">489</a>
-            <a class="next" href="">&gt;&gt;</a>
-        </div>
-    </div>
 
-</div>
-<script>
-    layui.extend({
-        admin: '{/}../../static/js/admin'
-    });
-    layui.use(['laydate', 'jquery','admin'], function() {
-        var laydate = layui.laydate,
-            $= layui.jquery,
-            admin = layui.admin;
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#start' //指定元素
+
+    <table class="layui-hide" id="articleList"   lay-filter="demo"></table>
+
+
+
+    <script type="text/html" id="operateTpl">
+        <a title="编辑" lay-event="edit" href="javascript:;">
+            <i class="layui-icon">&#xe642;</i>
+        </a>
+    </script>
+
+    <script type="text/javascript">
+        layui.extend({
+            admin: '{/}../../static/js/admin'
         });
 
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#end' //指定元素
-        });
+        layui.use(['table', 'jquery', 'admin'], function() {
+            var table = layui.table,
+                $ = layui.jquery,
+                admin = layui.admin;
 
-        /*用户-停用*/
-        function member_stop(obj, id) {
-            layer.confirm('确认要停用吗？', function(index) {
-                if($(obj).attr('title') == '启用') {
-                    //发异步把用户状态进行更改
-                    $(obj).attr('title', '停用')
-                    $(obj).find('i').html('&#xe62f;');
 
-                    $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
-                    layer.msg('已停用!', {
-                        icon: 5,
+            table.render({
+                elem: '#articleList',
+                cellMinWidth: 80,
+                cols: [
+                    [{
+                        field: 'uid',title: 'ID',sort: true
+                    }, {
+                        field: 'username',title: '用户名',templet: '#usernameTpl'
+                    }, {
+                        field: 'sex',title: '性别',
+                    }, {
+                        field: 'isadmin',title: '权限',
+                    },{
+                        field: 'telephone',title: '手机',
+                    },{
+                        field: 'email',title: '邮箱',
+                    }, {
+                        field: 'address',title: '地址',
+                    },  {
+                        field: 'udate',title: '加入时间',
+                    }, {
+                        field: 'operate',title: '操作',toolbar: '#operateTpl',unresize: true
+                    }]
+                ],
+                url:"../../admin/power",
+                page: true,
+                limits:[5,10]
+            });
+            var active = {
+                reload:function(){
+                    var title = $.trim($('#title').val());
+                    table.reload("articleList",{
+                        page:{curr:1},
+                        where:{title:title}
+                    });
+                },
+                getCheckData: function() { //获取选中数据
+                    var checkStatus = table.checkStatus('articleList'),
+                        data = checkStatus.data;
+                    //console.log(data);
+                    //layer.alert(JSON.stringify(data));
+                    if(data.length > 0) {
+                        layer.confirm('确认要删除吗？' + JSON.stringify(data), function(index) {
+
+                            //找到所有被选中的，发异步进行删除
+                            $(".layui-table-body .layui-form-checked").parents('tr').remove();
+                            var ids = [];
+                            for(var i=0;i<data.length;i++){
+                                ids.push(data[i].uid)
+                            }
+                            $.post(
+                                "../../admin/delete",
+                                {"ids[]":ids},
+                                function (date) {
+                                    console.log(data)
+                                }
+                            )
+                            layer.msg('删除成功', {
+                                icon: 1
+                            });
+                        });
+                    } else {
+                        layer.msg("请先选择需要删除的文章！");
+                    }
+
+                },
+
+
+            };
+
+            $('.demoTable .layui-btn').on('click', function() {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+            $('.we-search .layui-btn').on('click', function() {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+            /*用户-删除*/
+            window.member_del = function(obj, id) {
+                layer.confirm('确认要删除吗？', function(index) {
+                    //发异步删除数据
+                    $(obj).parents("tr").remove();
+                    layer.msg('已删除!', {
+                        icon: 1,
                         time: 1000
                     });
+                });
+            }
+            table.on('tool(demo)', function (obj) {
+                var data = obj.data //获得当前行数据
+                    , layEvent = obj.event; //获得 lay-event 对应的值
+                if (layEvent === 'edit') {
+                    var title = "修改权限";
+                    var url = "../../pages/admin/ruleEdit";
+                    var w = ($(window).width() * 0.9);
 
-                } else {
-                    $(obj).attr('title', '启用')
-                    $(obj).find('i').html('&#xe601;');
-
-                    $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
-                    layer.msg('已启用!', {
-                        icon: 5,
-                        time: 1000
+                    var h = ($(window).height() - 50);
+                    layer.open({
+                        type: 2,
+                        area: [w + 'px', h + 'px'],
+                        fix: false, //不固定
+                        maxmin: true,
+                        shadeClose: true,
+                        shade: 0.4,
+                        title: title,
+                        content: url,
+                        success: function (layero, index) {
+                            //向iframe页的id=house的元素传值  // 参考 https://yq.aliyun.com/ziliao/133150
+                            var body = layer.getChildFrame('body', index);
+                            //巧妙的地方在这里哦
+                            body.contents().find("#isadmin").val(data.isadmin);
+                            body.contents().find("#uid").val(data.uid);
+                        },
+                        error: function (layero, index) {
+                            alert("修改失败");
+                        }
                     });
                 }
             });
-        }
 
-        /*用户-删除*/
-        function member_del(obj, id) {
-            layer.confirm('确认要删除吗？', function(index) {
-                //发异步删除数据
-                $(obj).parents("tr").remove();
-                layer.msg('已删除!', {
-                    icon: 1,
-                    time: 1000
-                });
-            });
-        }
+
+
+        });
 
         function delAll(argument) {
             var data = tableCheck.getData();
@@ -179,10 +190,10 @@
                 $(".layui-form-checked").not('.header').parents('tr').remove();
             });
         }
-    });
 
 
-</script>
+
+    </script>
 </body>
 
 </html>

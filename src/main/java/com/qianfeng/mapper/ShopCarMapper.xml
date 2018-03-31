@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--映射接口-->
+<mapper namespace="com.qianfeng.mapper.ShopCarMapper">
+<insert id="addShopCar" parameterType="com.qianfeng.model.ShopCar">
+    insert into shopcar (pid,pname,pimage,uid,shop_price) values(#{pid},#{pname},#{pimage},#{uid},#{shop_price})
+</insert>
+<select id="CheckShopCar"  parameterType="com.qianfeng.model.ShopCar" resultType="com.qianfeng.model.ShopCar">
+    select car_id,pid,pname,pimage,uid,shop_price from shopcar where uid=#{uid}
+</select>
+    <delete id="deleteAll" >
+       delete from shopcar where car_id=#{car_id}
+    </delete>
+    <delete id="deleteCar" >
+        delete from shopcar where car_id=#{car_id}
+    </delete>
+    <insert id="addorders" parameterType="com.qianfeng.model.Order" >
+        insert into orders (oid,oname,money,paystatus,delivery,ordertime,uid,status,address) values(#{oid},#{oname},#{money},#{paystatus},#{delivery},#{ordertime},#{uid},#{status},#{address})
+    </insert>
+    <insert id="addorderproduct" parameterType="com.qianfeng.model.Parameter">
+        insert into order_product  (oid,pid) values(#{oid},#{pid})
+    </insert>
+    <delete id="deleteShopCar"  >
+        delete from shopcar where  car_id=#{de}
+    </delete>
+    <update id="reduceNum" >
+        update product set pnumber=(pnumber-1)  where pid=#{pid}
+    </update>
+    <select id="selectIdbyCar" resultType="com.qianfeng.model.ShopCar">
+        select pid from shopcar where car_id=#{car_id}
+    </select>
+    <select id="checkOrder" resultType="com.qianfeng.model.Order">
+        select oid,oname,money,ordertime,uid,address,
+         CASE paystatus
+        WHEN 1 THEN "已支付"
+        WHEN 2 THEN "未支付"
+        ELSE "未知" END as paystatus,
+        CASE delivery
+        WHEN 1 THEN "顺丰快递"
+        WHEN 2 THEN "圆通快递"
+        WHEN 3 THEN "中通快递"
+        ELSE "未知" END as delivery
+         from orders where uid=#{uid} and status=1
+    </select>
+    <update id="removeOrder" >
+        update orders set status=2 where oid=#{oid}
+    </update>
+    <update id="removeOrders" >
+        update orders set status=2 where oid=#{oid}
+    </update>
+</mapper>

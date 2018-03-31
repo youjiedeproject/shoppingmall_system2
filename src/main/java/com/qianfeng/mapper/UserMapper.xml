@@ -5,7 +5,7 @@
 <!--映射接口-->
 <mapper namespace="com.qianfeng.mapper.UserMapper">
     <sql id="ResultItems">
-       p.pid,p.pname,p.market_price,p.shop_price,p.pimage,p.pdate,p.is_hot,p.pdesc,p.cid,c.cname,
+     p.pnumber,p.pimage, p.pid,p.pname,p.market_price,p.shop_price,p.pimage,p.pdate,p.is_hot,p.pdesc,p.cid,c.cname,
          CASE  p.status
 		WHEN 1 THEN "正常"
 		WHEN 2 THEN "下架"
@@ -35,6 +35,7 @@
              <if  test="cid!=null and cid!=''">
                  and cid =#{cid}
              </if>
+             and status=1
          </where>
     </select>
     <select id="selectPage"  resultType="Product" parameterType="Search" >
@@ -46,6 +47,7 @@
              <if  test="cid!=null and cid!=''">
                  and cid =#{cid}
              </if>
+             and status=1
          </where>
         limit #{pageIndex},#{currentCount}
     </select>
@@ -81,4 +83,194 @@
     <select id="selectCategoryNum" resultType="Long">
         select count(1) from category where status !=3
     </select>
+    <select id="selectAllUser" resultType="User" >
+        select
+        uid,username,password,email,telephone,udate,address,
+            CASE isadmin
+        WHEN 1 THEN "管理员"
+        WHEN 2 THEN "普通用户"
+        ELSE "未知" END as isadmin,
+            CASE sex
+        WHEN 1 THEN "男"
+        WHEN 2 THEN "女"
+        ELSE "未知" END as sex,
+        CASE status
+        WHEN 1 THEN "正常"
+        WHEN 2 THEN "删除"
+        ELSE "未知" END as status
+        from  user
+        <where>
+            <if test="q!=null and q.title!=null and q.title !=''">
+            and username like '%${q.title}%'
+        </if>
+           and status!=2
+          and isadmin=2
+        </where>
+        limit #{p.offset},#{p.limit}
+    </select>
+    <select id="selectUserNum" resultType="Long">
+        select count(1) from user where status !=2 and isadmin=2
+    </select>
+    <update id="updateUserStatus" parameterType="Integer">
+        update user set status=2 where  uid=#{id}
+    </update>
+    <select id="selectRecoverUser" resultType="User" >
+        select
+        uid,username,password,email,telephone,udate,address,
+        CASE isadmin
+        WHEN 1 THEN "管理员"
+        WHEN 2 THEN "普通用户"
+        ELSE "未知" END as isadmin,
+        CASE sex
+        WHEN 1 THEN "男"
+        WHEN 2 THEN "女"
+        ELSE "未知" END as sex,
+        CASE status
+        WHEN 1 THEN "正常"
+        WHEN 2 THEN "删除"
+        ELSE "未知" END as status
+        from  user
+        <where>
+            <if test="q!=null and q.title!=null and q.title !=''">
+                and username like '%${q.title}%'
+            </if>
+            and status=2
+            and isadmin=2
+        </where>
+        limit #{p.offset},#{p.limit}
+    </select>
+    <select id="selectRecoverUserNum" resultType="Long">
+        select count(1) from user where status =2 and isadmin=2
+    </select>
+    <update id="updateRecoverUserStatus" parameterType="Integer">
+        update user set status=1 where  uid=#{id}
+    </update>
+    <update id="updateCategoryStatus" parameterType="Integer">
+        update category set status=2 where  cid=#{id}
+    </update>
+    <select id="selectOrderList" resultType="Order" >
+        select
+       o.oid,o.oname,o.money,o.ordertime,o.uid,u.username,
+       CASE o.paystatus
+        WHEN 1 THEN "已支付"
+        WHEN 2 THEN "未支付"
+        ELSE "未知" END as paystatus,
+        CASE o.delivery
+        WHEN 1 THEN "顺丰快递"
+        WHEN 2 THEN "圆通快递"
+        WHEN 3 THEN "中通快递"
+        ELSE "未知" END as delivery,
+        CASE o.status
+        WHEN 1 THEN "正常"
+        WHEN 2 THEN "删除"
+        ELSE "未知" END as status
+        from orders as o left join user as u on o.uid=u.uid
+        <where>
+            <if test="q!=null and q.title!=null and q.title !=''">
+                and o.oname like '%${q.title}%'
+            </if>
+            and o.status=1
+        </where>
+        limit #{p.offset},#{p.limit}
+    </select>
+    <select id="selectOrderNum" resultType="Long">
+        select count(1) from orders where status =1
+    </select>
+    <update id="updateOrderDelete" parameterType="Integer">
+        update orders set status=2 where  oid=#{id}
+    </update>
+    <select id="selectAllAdmin" resultType="User"  >
+        select
+        uid,username,password,email,telephone,udate,address,
+        CASE isadmin
+        WHEN 1 THEN "管理员"
+        WHEN 2 THEN "普通用户"
+        ELSE "未知" END as isadmin,
+        CASE sex
+        WHEN 1 THEN "男"
+        WHEN 2 THEN "女"
+        ELSE "未知" END as sex,
+        CASE status
+        WHEN 1 THEN "正常"
+        WHEN 2 THEN "删除"
+        ELSE "未知" END as status
+        from  user
+        <where>
+            <if test="q!=null and q.title!=null and q.title !=''">
+                and username like '%${q.title}%'
+            </if>
+            and status!=2
+            and isadmin=1
+        </where>
+        limit #{p.offset},#{p.limit}
+    </select>
+    <select id="selectAdminNum" resultType="Long">
+        select count(1) from user where status !=2 and isadmin=1
+    </select>
+    <select id="selectPowerUser" resultType="User"  >
+        select
+        uid,username,password,email,telephone,udate,address,
+        CASE isadmin
+        WHEN 1 THEN "管理员"
+        WHEN 2 THEN "普通用户"
+        ELSE "未知" END as isadmin,
+        CASE sex
+        WHEN 1 THEN "男"
+        WHEN 2 THEN "女"
+        ELSE "未知" END as sex,
+        CASE status
+        WHEN 1 THEN "正常"
+        WHEN 2 THEN "删除"
+        ELSE "未知" END as status
+        from  user
+        <where>
+            <if test="q!=null and q.title!=null and q.title !=''">
+                and username like '%${q.title}%'
+            </if>
+            and status!=2
+        </where>
+        limit #{p.offset},#{p.limit}
+    </select>
+    <select id="selectPowerNum" resultType="Long">
+        select count(1) from user where status !=2
+    </select>
+    <update id="updateAdminStatus" parameterType="Integer">
+        update user set status=2 where  uid=#{id}
+    </update>
+    <update id="updateProduct" parameterType="Product" >
+        update product set pname=#{pname},market_price=#{market_price},shop_price=#{shop_price},cid=#{cid},is_hot=#{is_hot},pdate=#{pdate},pdesc=#{pdesc},status=#{status},pnumber=#{pnumber} where  pid=#{pid}
+    </update>
+  <insert id="userAdd" parameterType="com.qianfeng.model.User" >
+      insert into user (username,password,email,telephone,isadmin,udate,sex,address,status) values(#{username},#{password},#{email},#{telephone},#{isadmin},#{udate},#{sex},#{address},#{status})
+  </insert>
+    <insert id="addProduct" parameterType="com.qianfeng.model.Product" >
+        insert into product (pname,market_price,shop_price,pimage,pdate,is_hot,pdesc,cid,status,pnumber) values(#{pname},#{market_price},#{shop_price},#{pimage},#{pdate},#{is_hot},#{pdesc},#{cid},#{status},#{pnumber})
+    </insert>
+    <select id="verifierCategory" parameterType="com.qianfeng.model.Category" resultType="com.qianfeng.model.Category">
+        select cname from category where cname=#{cname}
+    </select>
+    <insert id="addCategory" parameterType="com.qianfeng.model.Category" >
+        insert into category (cname,status) values(#{cname},#{status})
+    </insert>
+    <insert id="adminadd" parameterType="com.qianfeng.model.User" >
+        insert into user (username,password,email,telephone,isadmin,udate,sex,address,status) values(#{username},#{password},#{email},#{telephone},#{isadmin},#{udate},#{sex},#{address},#{status})
+    </insert>
+    <update id="useredit" parameterType="com.qianfeng.model.User" >
+        update user set username=#{username},password=#{password},email=#{email},telephone=#{telephone},sex=#{sex},address=#{address},udate=#{udate} where  uid=#{uid}
+    </update>
+    <update id="categoryEdit" parameterType="com.qianfeng.model.Category" >
+        update category set cname=#{cname} where  cid=#{cid}
+    </update>
+    <select id="userSelect" resultType="com.qianfeng.model.User">
+        select username,uid from user where status =1
+    </select>
+    <update id="orderEdit" >
+        update orders set oname=#{oname},money=#{money},paystatus=#{paystatus},delivery=#{delivery},uid=#{uid},ordertime=#{ordertime} where  oid=#{oid}
+    </update>
+    <update id="adminEdit" parameterType="com.qianfeng.model.User" >
+        update user set username=#{username},password=#{password},email=#{email},telephone=#{telephone},sex=#{sex},address=#{address},udate=#{udate} where  uid=#{uid}
+    </update>
+    <update id="powerEdit" parameterType="com.qianfeng.model.User" >
+        update user set isadmin=#{isadmin} where  uid=#{uid}
+    </update>
 </mapper>

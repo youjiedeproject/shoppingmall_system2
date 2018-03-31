@@ -21,7 +21,12 @@
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
     <style type="text/css">
+        .layui-table-cell {
+            height: auto;
+            line-height: 28px;
+        }
         .layui-form-switch {
             width: 55px;
         }
@@ -60,18 +65,15 @@
         <button class="layui-btn layui-btn-danger" data-type="getCheckData"><i class="layui-icon">&#xe640;</i>批量删除</button>
         <button class="layui-btn" onclick="WeAdminShow('添加用户','${pageContext.request.contextPath}/pages/article/add',600,400)"><i class="layui-icon">&#xe61f;</i>添加</button>
     </div>
-    <table class="layui-hide" id="articleList"></table>
+    <table class="layui-hide" id="articleList" lay-filter="demo"></table>
 
 
 
     <script type="text/html" id="operateTpl">
-        <a title="编辑" onclick="WeAdminEdit('编辑','./edit', 2, 600, 400)" href="javascript:;">
+        <a title="编辑" lay-event="edit" href="javascript:;">
             <i class="layui-icon">&#xe642;</i>
         </a>
-        <a title="查看" onclick="WeAdminShow('查看文章','./show',600,400)" href="javascript:;">
-            <i class="layui-icon">&#xe63c;</i>
-        </a>
-        <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
+        <a title="删除" id="product_del" onclick="product_del(this)" href="javascript:;">
             <i class="layui-icon">&#xe640;</i>
         </a>
     </script>

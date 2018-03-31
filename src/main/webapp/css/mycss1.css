@@ -77,7 +77,7 @@ ul a:link{
 				color: black;	
 			}
 			ul  a:visited{
-				color: black;	
+				color: black;
 			}
 			ul a:hover{
 				color:#999;	
@@ -85,3 +85,15 @@ ul a:link{
 			ul a:active{
 				color:cadetblue;	
 			}
+.myc7{
+	color: black;
+}
+ul  a:visited{
+	color: black;
+}
+ul a:hover{
+	color:#999;
+}
+ul a:active{
+	color:cadetblue;
+}

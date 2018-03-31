@@ -1,20 +1,36 @@
 package com.qianfeng.model;
 
-import java.util.Date;
-
 public class Product {
     private Integer pid;
     private  String pname;
     private Double market_price;
     private Double shop_price;
     private String pimage;
-    private Date pdate;
+    private String pdate;
     private Integer is_hot;
     private String pdesc;
     private Integer pflag;
     private Integer cid;
     private String cname;
     private String statusName;
+    private Integer status;
+    private Integer pnumber;
+
+    public Integer getPnumber() {
+        return pnumber;
+    }
+
+    public void setPnumber(Integer pnumber) {
+        this.pnumber = pnumber;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public String getStatusName() {
         return statusName;
@@ -72,11 +88,11 @@ public class Product {
         this.pimage = pimage;
     }
 
-    public Date getPdate() {
+    public String getPdate() {
         return pdate;
     }
 
-    public void setPdate(Date pdate) {
+    public void setPdate(String pdate) {
         this.pdate = pdate;
     }
 

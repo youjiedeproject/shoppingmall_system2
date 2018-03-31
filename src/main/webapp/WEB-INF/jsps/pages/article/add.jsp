@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta charset="UTF-8">
-    <title>添加分类-后台管理系统-Admin 1.0</title>
+<head >
+    <meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
+    <title>添加商品-后台管理系统</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -22,102 +22,163 @@
 
 <body>
 <div class="weadmin-body">
-    <form class="layui-form" enctype="multipart/form-data" method="post">
+    <form class="layui-form" id="addToForm"  enctype="multipart/form-data"  method="post">
         <div class="layui-form-item">
-            <label for="categoryWeight" class="layui-form-label">商品名称</label>
+            <label for="pname" class="layui-form-label">商品名称</label>
             <div class="layui-input-inline">
-                <input type="text" id="weight" name="weight" autocomplete="off" class="layui-input">
+                <input type="text" id="pname" name="pname" autocomplete="off" class="layui-input" lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label for="categoryName" class="layui-form-label">市场价格</label>
+            <label for="market_price" class="layui-form-label">市场价格</label>
             <div class="layui-input-inline">
-                <input type="text" id="categoryName" name="categoryName" autocomplete="off" class="layui-input">
+                <input type="text" id="market_price" name="market_price" autocomplete="off" class="layui-input" lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label for="categoryName" class="layui-form-label">商铺价格</label>
+            <label for="shop_price" class="layui-form-label">商铺价格</label>
             <div class="layui-input-inline">
-                <input type="text" id="categoryName" name="categoryName" autocomplete="off" class="layui-input">
+                <input type="text" id="shop_price" name="shop_price" autocomplete="off" class="layui-input" lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label for="categoryName" class="layui-form-label">商品图片</label>
+            <label for="pnumber" class="layui-form-label">库存量</label>
             <div class="layui-input-inline">
-                <input type="text" id="categoryName" name="categoryName" autocomplete="off" class="layui-input">
+                <input type="text" id="pnumber" name="pnumber" autocomplete="off" class="layui-input" lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label for="categoryName" class="layui-form-label">简介</label>
+            <label for="file" class="layui-form-label">商品图片</label>
             <div class="layui-input-inline">
-                <input type="text" id="categoryName" name="categoryName" autocomplete="off" class="layui-input">
+                <input type="file" id="file" name="file" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label for="username" class="layui-form-label">
-                <span class="we-red">*</span>商品状态
-            </label>
+            <label for="pdesc" class="layui-form-label">简介</label>
             <div class="layui-input-inline">
-                <select name="contrller">
-                    <option>正常</option>
-                    <option>下架</option>
+                <textarea id="pdesc" name="pdesc" style="width: 300px;height: 100px" lay-verify="required"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="we-red">*</span>分类</label>
+            <div class="layui-input-block">
+                <select name="cid" id="cid" required="" lay-verify="required" lay-filter="cid">
+                    <option value="">请选择</option>
                 </select>
             </div>
         </div>
         <div class="layui-form-item">
-            <label for="username" class="layui-form-label">
-                <span class="we-red">*</span>商品类别
-            </label>
-            <div class="layui-input-inline">
-                <select name="contrller">
-                    <option>支付方式</option>
-                    <option>支付宝</option>
-                    <option>微信</option>
-                    <option>货到付款</option>
+            <label class="layui-form-label"><span class="we-red">*</span>是否热门</label>
+            <div class="layui-input-block">
+                <select name="is_hot" id="is_hot" required="" lay-verify="required" lay-filter="is_hot">
+                    <option value="">请选择</option>
+                    <option value="1">是</option>
+                    <option value="0">否</option>
                 </select>
+                <input type="text" hidden id="hot">
             </div>
         </div>
-
-
-
-
+        <div class="layui-form-item">
+           <input type="button" value="添加" class="layui-btn" onclick="sub()">
+        </div>
     </form>
 </div>
 <script>
+    layui.extend({
+        admin: '{/}../../static/js/admin'
+    });
+    var form;
+    var $;
     layui.use(['form','layer'], function(){
-        var form = layui.form,
-            layer = layui.layer;
-
-        //自定义验证规则
-        form.verify({
-            nikename: function(value){
-                if(value.length < 5){
-                    return '昵称至少得5个字符啊';
-                }
-            }
-            ,pass: [/(.+){6,12}$/, '密码必须6到12位']
-            ,repass: function(value){
-                if($('#L_pass').val()!=$('#L_repass').val()){
-                    return '两次密码不一致';
-                }
-            }
-        });
+        form = layui.form;
+        var layer = layui.layer;
+        $ = layui.jquery;
+        loadCategory();
 
         //监听提交
-        form.on('submit(add)', function(data){
-            console.log(data);
-            //发异步，把数据提交给php
-            layer.alert("增加成功", {icon: 6},function () {
-                // 获得frame索引
-                var index = parent.layer.getFrameIndex(window.name);
-                //关闭当前frame
-                parent.layer.close(index);
+       /* form.on('submit(insert)', function (data) {
+            $.ajax({
+                data: $("#addToForm").serialize(),
+                type: "post",
+                url: "/product/addProduct",
+                success: function (res) {
+                    if (res !=null) {
+                        layer.alert("添加成功", {icon: 6}, function () {
+                            // 获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                            parent.layui.table.reload('articleList',{page:{curr:1}});
+                        });
+                    } else {
+                        layer.alert("添加失败", {icon: 5}, function () {
+                            // 获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                        });
+                    }
+
+                }
             });
             return false;
-        });
-
+        });*/
 
     });
+//查询分类
+    function loadCategory() {
+        //去后台查询所有的分类信息
+        $.ajax({
+            dataType: "json",
+            type: "GET",
+            url: "${pageContext.request.contextPath}/product/categorySelect",
+            success: function (data) {
+                var category = document.getElementById("cid");
+                for (var i = 0; i < data.length; i++) {
+                    //将后台返回的json格式的分类信息,逐个添加到select中option
+                    var option = document.createElement("option");
+                    option.setAttribute("value", data[i].cid);
+                    option.innerText = data[i].cname;
+                    category.appendChild(option);
+                    form.render('select');
+                }
+            }
+        });
+    }
+
+</script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.validate.js" ></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/messages_zh.js" ></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jqueryform.js"></script>
+<script type="text/javascript">
+    function sub() {
+        $("#addToForm").ajaxSubmit({
+            type : "POST",
+            url : "${pageContext.request.contextPath}/product/addProduct",
+            dataType : "json",
+            success : function(data) {
+                if (data !=null) {
+                    layer.alert("添加成功", {icon: 6}, function () {
+                        // 获得frame索引
+                        var index = parent.layer.getFrameIndex(window.name);
+                        //关闭当前frame
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        parent.layui.table.reload('articleList',{page:{curr:1}});
+                    });
+                } else {
+                    layer.alert("添加失败", {icon: 5}, function () {
+                        // 获得frame索引
+                        var index = parent.layer.getFrameIndex(window.name);
+                        //关闭当前frame
+                        parent.layer.close(index);
+                    });
+                }
+            }
+        });
+    }
 </script>
 </body>
 

@@ -18,42 +18,27 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/font.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/weadmin.css">
     <script type="text/javascript" src="${pageContext.request.contextPath}/lib/layui/layui.js" charset="utf-8"></script>
-
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.3.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.validate.js" ></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/messages_zh.js" ></script>
 </head>
 
 <body>
 <!-- 顶部开始 -->
 <div class="container">
     <div class="logo">
-        <a href="./index.jsp">Admin v1.0</a>
+        <a href="${pageContext.request.contextPath}/index">小杰后台管理</a>
     </div>
     <div class="left_open">
         <i title="展开左侧栏" class="iconfont">&#xe699;</i>
     </div>
-    <ul class="layui-nav left fast-add" lay-filter="">
-        <li class="layui-nav-item">
-            <a href="javascript:;">+新增</a>
-            <dl class="layui-nav-child">
-                <!-- 二级菜单 -->
-                <dd>
-                    <a onclick="WeAdminShow('资讯','http://www.baidu.com')"><i class="iconfont">&#xe6a2;</i>资讯</a>
-                </dd>
-                <dd>
-                    <a onclick="WeAdminShow('图片','http://www.baidu.com')"><i class="iconfont">&#xe6a8;</i>图片</a>
-                </dd>
-                <dd>
-                    <a onclick="WeAdminShow('用户','http://www.baidu.com')"><i class="iconfont">&#xe6b8;</i>用户</a>
-                </dd>
-            </dl>
-        </li>
-    </ul>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
             <a href="javascript:;">Admin</a>
             <dl class="layui-nav-child">
                 <!-- 二级菜单 -->
                 <dd>
-                    <a onclick="WeAdminShow('个人信息','http://www.baidu.com')">个人信息</a>
+                    <a onclick="WeAdminShow('个人信息','${pageContext.request.contextPath}/')">个人信息</a>
                 </dd>
                 <dd>
                     <a onclick="WeAdminShow('切换帐号','./backgroundLogin.jsp')">切换帐号</a>
@@ -92,7 +77,7 @@
                     <li>
                         <a _href="${pageContext.request.contextPath}/pages/member/del">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>会员删除</cite>
+                            <cite>会员恢复</cite>
 
                         </a>
                     </li>
@@ -150,18 +135,6 @@
                         </a>
                     </li>
                     <li>
-                        <a _href="${pageContext.request.contextPath}/pages/admin/role">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>角色管理</cite>
-                        </a>
-                    </li>
-                    <li>
-                        <a _href="${pageContext.request.contextPath}/pages/admin/cate">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>权限分类</cite>
-                        </a>
-                    </li>
-                    <li>
                         <a _href="${pageContext.request.contextPath}/pages/admin/rule">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>权限管理</cite>
@@ -192,7 +165,7 @@
 <!-- 中部结束 -->
 <!-- 底部开始 -->
 <div class="footer">
-    <div class="copyright">Copyright ©2018 Admin v1.0 All Rights Reserved</div>
+    <div class="copyright" style="text-align: center">Copyright ©2018  小杰商城后台管理</div>
 </div>
 <!-- 底部结束 -->
 <script type="text/javascript">
@@ -204,14 +177,15 @@
     //			layui.use('admin', function(){
     //			  var admin = layui.admin;
     //			});
-    layui.config({
+   layui.config({
         base: './static/js/'
         ,version: '101100'
     }).use('admin');
     layui.use(['jquery','admin'], function(){
         var $ = layui.jquery;
-        $(function(){
-            var login = JSON.parse(localStorage.getItem("login"));
+     $(function(){
+       <%--var login = "${userlogin}";--%>
+         var login = JSON.parse(localStorage.getItem("login"));
             if(login){
                 if(login=0){
                     window.location.href='./backgroundLogin';

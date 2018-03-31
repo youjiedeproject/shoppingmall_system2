@@ -68,7 +68,8 @@
             <a href="${pageContext.request.contextPath}/user/">登录</a>
             <a href="${pageContext.request.contextPath}/user/register">注册</a>
         </c:if>
-        <a href="${pageContext.request.contextPath}/showCatServlet?username=${userlogin.username}">购物车</a>
+        <a onclick="CheckShopCar(${userlogin.uid})" href="javascript:void(0)">购物车</a>
+        <a onclick="checkOrder(${userlogin.uid})" href="javascript:void(0)">我的订单</a>
     </div></div>
 <div class="clear"></div>
 <div id="myc2">
@@ -94,7 +95,7 @@
 <div style="width:100% ">
     <c:forEach items="${pageBean.pageData}" var="Product" >
         <div style="width:25%;float:left;height:250px">
-            <a href="${pageContext.request.contextPath}/shoppingCatServlet?pid=${Product.pid}"><img src="${pageContext.request.contextPath}/images/${Product.pimage}" width="130px" height="130px"/></a>
+            <a href="${pageContext.request.contextPath}/product/checkProduct?pid=${Product.pid}"><img src="${pageContext.request.contextPath}/images/${Product.pimage}" width="130px" height="130px"/></a>
             <p>${Product.pname}<br/>店铺价格¥${Product.market_price}</p>
         </div>
     </c:forEach>
@@ -151,4 +152,21 @@
     Copyright ©2010-2017  &nbsp小杰商城&nbsp; 版权所有
 </div>
 </body>
+<script type="text/javascript">
+    function  CheckShopCar(uid){
+        if(uid!=null){
+            location.href="${pageContext.request.contextPath}/CheckShopCar?uid="+uid;
+        }else {
+            alert("您还没有登录！")
+        }
+    }
+    function  checkOrder(uid){
+        if(uid!=null){
+            location.href="${pageContext.request.contextPath}/checkOrder?uid="+uid;
+        }else {
+            alert("您还没有登录！")
+        }
+    }
+</script>
+
 </html>

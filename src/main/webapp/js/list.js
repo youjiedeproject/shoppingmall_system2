@@ -21,9 +21,13 @@ layui.use(['table', 'jquery', 'admin'], function() {
             }, {
                 field: 'pdate',title: '发布时间',sort: true
             }, {
+                field: 'pimage',title: '图片',templet:'<div><img src="../../images/{{d.pimage}}"></div>',style:'height:48px;width:48px;line-height:48px!important;'
+            },{
                 field: 'cname',title: '分类',sort: true
             },{
                 field: 'statusName',title: '商品状态',sort: true
+            }, {
+                field: 'pnumber',title: '库存量',sort: true
             }, {
                 field: 'pdesc',title: '简介',sort: true
             },  {
@@ -72,31 +76,7 @@ layui.use(['table', 'jquery', 'admin'], function() {
             }
 
         },
-        Recommend: function() {
-            var checkStatus = table.checkStatus('articleList'),
-                data = checkStatus.data;
-            if(data.length > 0) {
-                layer.msg("您点击了推荐操作");
-                for(var i = 0; i < data.length; i++) {
-                    console.log("a:" + data[i].recommend);
-                    data[i].recommend = "checked";
-                    console.log("aa:" + data[i].recommend);
-                    form.render();
-                }
 
-            } else {
-                console.log("b");
-                layer.msg("请先选择");
-            }
-
-            //$(".layui-table-body .layui-form-checked").parents('tr').children().children('input[name="zzz"]').attr("checked","checked");
-        },
-        Top: function() {
-            layer.msg("您点击了置顶操作");
-        },
-        Review: function() {
-            layer.msg(";");
-        }
 
     };
 
@@ -121,7 +101,7 @@ layui.use(['table', 'jquery', 'admin'], function() {
         });
     }
 
-});
+
 
 function delAll(argument) {
     var data = tableCheck.getData();
@@ -133,3 +113,80 @@ function delAll(argument) {
         $(".layui-form-checked").not('.header').parents('tr').remove();
     });
 }
+
+/*商品-删除*/
+window.product_del = function (obj) {
+    layer.confirm('确认要删除吗？', function (index) {
+        var id = $(obj).parents("tr").children("[data-field='pid']").text();
+        //提交ajax
+        var ids=[];
+        ids.push(id);
+        $.ajax({
+            data: {'ids[]': ids},
+            dataType: "text",
+            type: "POST",
+            url: "../../items/delete",
+            success: function (res) {
+                if (res!=null) {
+                    $(obj).parents('tr').remove();
+                    layer.msg('已删除!', {
+                        icon: 1,
+                        time: 1000
+                    });
+                } else {
+                    layer.msg('删除失败!', {
+                        icon: 2,
+                        time: 1000
+                    });
+                }
+            }
+        });
+
+    });
+}
+ table.on('tool(demo)', function (obj) {
+    var data = obj.data //获得当前行数据
+        , layEvent = obj.event; //获得 lay-event 对应的值
+    if (layEvent === 'edit') {
+        var cid = data.cid;
+//               layer.msg(data.cid);
+        var title = "修改商品";
+        var url = "../../pages/article/product_edit";
+        var w = ($(window).width() * 0.9);
+
+        var h = ($(window).height() - 50);
+
+
+        layer.open({
+            type: 2,
+            area: [w + 'px', h + 'px'],
+            fix: false, //不固定
+            maxmin: true,
+            shadeClose: true,
+            shade: 0.4,
+            title: title,
+            content: url,
+            success: function (layero, index) {
+                //向iframe页的id=house的元素传值  // 参考 https://yq.aliyun.com/ziliao/133150
+                var body = layer.getChildFrame('body', index);
+                //巧妙的地方在这里哦
+                body.contents().find("#pid").val(data.pid);
+                body.contents().find("#pname").val(data.pname);
+                body.contents().find("#marketprice").val(data.market_price);
+                body.contents().find("#shopprice").val(data.shop_price);
+                body.contents().find("#pimage").val(data.pimage);
+                body.contents().find("#pdate").val(data.pdate);
+                body.contents().find("#hot").val(data.is_hot);
+                body.contents().find("#pdesc").val(data.pdesc);
+                body.contents().find("#cname").val(data.cname);
+                body.contents().find("#sname").val(data.statusName);
+                body.contents().find("#pnumber").val(data.pnumber);
+            },
+            error: function (layero, index) {
+                alert("修改失败");
+            }
+        });
+    }
+});
+
+});

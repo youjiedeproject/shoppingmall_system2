@@ -68,7 +68,8 @@
             <a href="${pageContext.request.contextPath}/user/">登录</a>
             <a href="${pageContext.request.contextPath}/user/register">注册</a>
         </c:if>
-        <a href="${pageContext.request.contextPath}/showCatServlet?username=${userlogin.username}">购物车</a>
+        <a onclick="CheckShopCar(${userlogin.uid})" href="javascript:void(0)">购物车</a>
+        <a onclick="checkOrder(${userlogin.uid})" href="javascript:void(0)">我的订单</a>
     </div></div>
 <div class="clear"></div>
 <div id="myc2">
@@ -151,4 +152,20 @@
     Copyright ©2010-2017  &nbsp小杰商城&nbsp; 版权所有
 </div>
 </body>
+<script type="text/javascript">
+  function  CheckShopCar(uid){
+      if(uid!=null){
+          location.href="${pageContext.request.contextPath}/CheckShopCar?uid="+uid;
+      }else {
+          alert("您还没有登录！")
+      }
+  }
+  function  checkOrder(uid){
+      if(uid!=null){
+          location.href="${pageContext.request.contextPath}/checkOrder?uid="+uid;
+      }else {
+          alert("您还没有登录！")
+      }
+  }
+</script>
 </html>
