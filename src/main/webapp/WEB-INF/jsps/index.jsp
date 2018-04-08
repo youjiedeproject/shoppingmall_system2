@@ -34,17 +34,14 @@
     </div>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
-            <a href="javascript:;">Admin</a>
+            <a href="javascript:;">${backUser.username}</a>
             <dl class="layui-nav-child">
                 <!-- 二级菜单 -->
                 <dd>
-                    <a onclick="WeAdminShow('个人信息','${pageContext.request.contextPath}/')">个人信息</a>
+                    <a href="${pageContext.request.contextPath}/backgroundLogin">切换帐号</a>
                 </dd>
                 <dd>
-                    <a onclick="WeAdminShow('切换帐号','./backgroundLogin.jsp')">切换帐号</a>
-                </dd>
-                <dd>
-                    <a class="loginout" href="./backgroundLogin.jsp">退出</a>
+                    <a href="${pageContext.request.contextPath}/backgroundLogin">退出</a>
                 </dd>
             </dl>
         </li>
@@ -121,6 +118,7 @@
                     </li>
                 </ul>
             </li>
+            <c:if test="${backUser.isadmin==3}">
             <li>
                 <a href="javascript:;">
                     <i class="iconfont">&#xe726;</i>
@@ -142,6 +140,7 @@
                     </li>
                 </ul>
             </li>
+            </c:if>
         </ul>
     </div>
 </div>
@@ -184,10 +183,16 @@
     layui.use(['jquery','admin'], function(){
         var $ = layui.jquery;
      $(function(){
-       <%--var login = "${userlogin}";--%>
-         var login = JSON.parse(localStorage.getItem("login"));
-            if(login){
-                if(login=0){
+       var login = "${backUser.isadmin}";
+        /* var login = JSON.parse(localStorage.getItem("login"));*/
+     /*   if(login!=null){
+            return false;
+        }else{
+             window.location.href='./backgroundLogin';
+             return false;
+         }*/
+           /* if(login){
+                if(login=2){
                     window.location.href='./backgroundLogin';
                     return false;
                 }else{
@@ -196,7 +201,7 @@
             }else{
                 window.location.href='./backgroundLogin';
                 return false;
-            }
+            }*/
         });
     });
 

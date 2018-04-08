@@ -14,47 +14,51 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/font.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/weadmin.css">
     <script src="${pageContext.request.contextPath}/lib/layui/layui.js" charset="utf-8"></script>
-
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.3.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.validate.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/messages_zh.js"></script>
 </head>
 <body class="login-bg">
 
 <div class="login">
-    <div class="message">Admin 1.0-管理登录</div>
+    <div class="message">小杰商城后台管理登录</div>
     <div id="darkbannerwrap"></div>
 
-    <form method="post" class="layui-form" >
+    <form method="post" class="layui-form" id="Form1">
         <input name="username" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >
         <hr class="hr15">
         <input name="password" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
         <hr class="hr15">
-        <input class="loginin" value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
-        <hr class="hr20" >
-        <div>
-            前端静态展示，请随意输入，即可登录。
+        <div style="text-align: center">
+        <a title="登录" onclick="sub()">
+            <i class="layui-btn layui-btn-normal" style="font-size:15px" >登录</i>
+        </a>
         </div>
+        <hr class="hr20" >
     </form>
 </div>
 
 <script type="text/javascript">
-
-    layui.extend({
-        admin: '{/}./static/js/admin'
-    });
-    layui.use(['form','admin'], function(){
-        var form = layui.form
-            ,admin = layui.admin;
-        // layer.msg('玩命卖萌中', function(){
-        //   //关闭后的操作
-        //   });
-        //监听提交
-        form.on('submit(login)', function(data){
-            // alert(888)
-            layer.msg(JSON.stringify(data.field),function(){
-                location.href='./backgroundLogin'
+    function sub() {
+            $.ajax({
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "${pageContext.request.contextPath }/backRegister" ,//url
+                data: $('#Form1').serialize(),
+                success: function (result) {
+                    if(result==1){
+                        location.href="${pageContext.request.contextPath }/index";
+                    } else if(result==2){
+                        alert("您没有权限登录后台");
+                    }else{
+                        alert("用户名或密码错误");
+                    }
+                },
+                error : function() {
+                    alert("异常！");
+                }
             });
-            return false;
-        });
-    });
+    }
 </script>
 <!-- 底部结束 -->
 </body>

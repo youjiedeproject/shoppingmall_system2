@@ -21,7 +21,7 @@
         </where>
     </sql>
     <select id="selectByName" parameterType="User" resultType="User" >
-            select * from user where username=#{username}
+            select * from user where username=#{username} and status=1
     </select>
     <select id="selectAllCategory"  resultType="Category" >
         select * from category
@@ -52,7 +52,7 @@
         limit #{pageIndex},#{currentCount}
     </select>
 <insert id="insertAll" parameterType="User">
-    insert into user (username,password,eamil,telephone) VALUES  (#{username},#{password},#{email},#{telephone})
+    insert into user (username,password,email,telephone,isadmin,udate,sex,address,status) VALUES  (#{username},#{password},#{email},#{telephone},#{isadmin},#{udate},#{sex},#{address},#{status})
 </insert>
     <select id="selectProductById" resultType="Product">
         select * from product  where pid=#{pid}
@@ -89,6 +89,7 @@
             CASE isadmin
         WHEN 1 THEN "管理员"
         WHEN 2 THEN "普通用户"
+        WHEN 3 THEN "超级管理员"
         ELSE "未知" END as isadmin,
             CASE sex
         WHEN 1 THEN "男"
@@ -120,6 +121,7 @@
         CASE isadmin
         WHEN 1 THEN "管理员"
         WHEN 2 THEN "普通用户"
+        WHEN 3 THEN "超级管理员"
         ELSE "未知" END as isadmin,
         CASE sex
         WHEN 1 THEN "男"
@@ -150,7 +152,7 @@
     </update>
     <select id="selectOrderList" resultType="Order" >
         select
-       o.oid,o.oname,o.money,o.ordertime,o.uid,u.username,
+       o.oid,o.oname,o.money,o.ordertime,o.uid,u.username,o.address,
        CASE o.paystatus
         WHEN 1 THEN "已支付"
         WHEN 2 THEN "未支付"
@@ -185,6 +187,7 @@
         CASE isadmin
         WHEN 1 THEN "管理员"
         WHEN 2 THEN "普通用户"
+        WHEN 3 THEN "超级管理员"
         ELSE "未知" END as isadmin,
         CASE sex
         WHEN 1 THEN "男"
@@ -200,7 +203,7 @@
                 and username like '%${q.title}%'
             </if>
             and status!=2
-            and isadmin=1
+            and isadmin!=2
         </where>
         limit #{p.offset},#{p.limit}
     </select>
@@ -213,6 +216,7 @@
         CASE isadmin
         WHEN 1 THEN "管理员"
         WHEN 2 THEN "普通用户"
+        WHEN 3 THEN "超级管理员"
         ELSE "未知" END as isadmin,
         CASE sex
         WHEN 1 THEN "男"
@@ -265,7 +269,7 @@
         select username,uid from user where status =1
     </select>
     <update id="orderEdit" >
-        update orders set oname=#{oname},money=#{money},paystatus=#{paystatus},delivery=#{delivery},uid=#{uid},ordertime=#{ordertime} where  oid=#{oid}
+        update orders set oname=#{oname},money=#{money},paystatus=#{paystatus},delivery=#{delivery},uid=#{uid},ordertime=#{ordertime},address=#{address} where  oid=#{oid}
     </update>
     <update id="adminEdit" parameterType="com.qianfeng.model.User" >
         update user set username=#{username},password=#{password},email=#{email},telephone=#{telephone},sex=#{sex},address=#{address},udate=#{udate} where  uid=#{uid}

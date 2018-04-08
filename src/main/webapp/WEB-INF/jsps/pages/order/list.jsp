@@ -106,6 +106,8 @@
                     field: 'ordertime',title: '创建时间',sort: true
                 },  {
                     field: 'username',title: '创建人',sort: true
+                },{
+                    field: 'address',title: '地址',sort: true
                 }, {
                     field: 'operate',title: '操作',toolbar: '#operateTpl',unresize: true
                 }]
@@ -211,6 +213,7 @@
                         body.contents().find("#delivery").val(data.delivery);
                         body.contents().find("#ordertime").val(data.ordertime);
                         body.contents().find("#username").val(data.username);
+                        body.contents().find("#address").val(data.address);
                     },
                     error: function (layero, index) {
                         alert("修改失败");

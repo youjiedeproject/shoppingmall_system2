@@ -2,6 +2,7 @@ package com.qianfeng.mapper;
 
 import com.qianfeng.model.Order;
 import com.qianfeng.model.Parameter;
+import com.qianfeng.model.Product;
 import com.qianfeng.model.ShopCar;
 
 import java.util.List;
@@ -30,4 +31,10 @@ public interface ShopCarMapper {
     Integer removeOrder(String oid);
 
     Integer removeOrders(String oid);
+
+    Order viewOrder(String oid);
+
+    List<Integer> viewProduct(String oid);
+
+    Product selectProductById(Integer pid);
 }

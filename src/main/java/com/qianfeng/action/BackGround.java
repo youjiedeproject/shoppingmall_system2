@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -203,5 +204,24 @@ public class BackGround {
     @RequestMapping(value = "/powerEdit", method = RequestMethod.POST)
     public Integer powerEdit(User user) {
         return service.powerEdit(user);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/backRegister", method = RequestMethod.POST)
+    public Integer backRegister(User user, HttpSession session) {
+        User user1 = service.backRegister(user);
+        if(user1!=null){
+       String username=user1.getPassword();
+        if(username.equals(user.getPassword())){
+            if(user1.getIsadmin().equals("1")||user1.getIsadmin().equals("3")){
+                session.setAttribute("backUser",user1);
+                return 1;
+            }else{
+                return 2;
+            }
+          }
+        }
+        return 3;
     }
 }

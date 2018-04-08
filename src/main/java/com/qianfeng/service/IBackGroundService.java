@@ -34,4 +34,5 @@ public interface IBackGroundService {
        Integer orderEdit(Order order);
        Integer adminEdit(User user);
        Integer powerEdit(User user);
+       User backRegister(User user);
 }

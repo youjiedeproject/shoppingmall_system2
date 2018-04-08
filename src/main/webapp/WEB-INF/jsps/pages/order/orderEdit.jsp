@@ -96,6 +96,15 @@
 
         </div>
         <div class="layui-form-item">
+            <label for="address" class="layui-form-label">
+                <span class="we-red">*</span>简介
+            </label>
+            <div class="layui-input-inline">
+                <textarea id="address" name="address" style="width: 300px;height: 100px"></textarea>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
             <button class="layui-btn" lay-filter="update" lay-submit="">
                 修改
             </button>

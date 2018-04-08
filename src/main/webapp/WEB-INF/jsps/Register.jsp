@@ -93,6 +93,12 @@
                 <td align="center" width="30%">用户名</td>
                 <td align="left" width="*"><input type="text" id="username" name="username" size="50"><span id="span1"></span></td>
             </tr>
+            <tr style="text-align: center">
+                <td colspan="2">
+                 男 <input type="radio" name="sex" value="1" title="男" name="sex">
+                 女 <input type="radio" name="sex" value="2" title="女" name="sex">
+                </td>
+            </tr>
             <tr>
                 <td align="center" width="30%">密码</td>
                 <td align="left" width="*"><input type="password" name="password" size="50"></td>
@@ -108,6 +114,10 @@
             <tr>
                 <td align="center" width="30%">电话</td>
                 <td align="left" width="*"><input type="text" name="telephone" size="50"></td>
+            </tr>
+            <tr>
+                <td align="center" width="30%">地址</td>
+                <td align="left" width="*"><input type="text" name="address" size="50"></td>
             </tr>
             <tr>
                 <td colspan="2" style="text-align:center">

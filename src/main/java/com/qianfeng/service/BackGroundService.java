@@ -275,9 +275,16 @@ public class BackGroundService implements IBackGroundService {
     public Integer powerEdit(User user) {
         if("管理员".equals(user.getIsadmin())){
             user.setIsadmin("1");
-        }else{
+        }else if("普通用户".equals(user.getIsadmin())){
             user.setIsadmin("2");
+        }else{
+            user.setIsadmin("3");
         }
         return mapper.powerEdit(user);
+    }
+
+    @Override
+    public User backRegister(User user) {
+       return  mapper.selectByName(user);
     }
 }

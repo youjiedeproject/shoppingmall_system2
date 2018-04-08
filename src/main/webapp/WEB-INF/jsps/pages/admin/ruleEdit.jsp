@@ -37,6 +37,7 @@
                     <option value="">请选择<option>
                     <option value="管理员">管理员<option>
                     <option value="普通用户">普通用户<option>
+                    <option value="超级管理员">超级管理员<option>
                 </select>
             </div>
         </div>

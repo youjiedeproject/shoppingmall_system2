@@ -77,92 +77,44 @@
 <div class="clear"></div>
 <hr>
 <div style="width:1200px;margin: auto">
-    <c:if test="${orderList.size()!=0 }">
         <form action="settingOrder" id="form1" method="post">
-            <table style="width:100%;background-color:lightcoral;text-align: center" border="1" cellspacing="1" cellpadding="1">
+            <div style="float: right">
+                <a title="返回"  onclick="javascript:history.go(-1)" >
+                    <i class="layui-btn layui-btn-normal" style="font-size:15px" >返回</i>
+                </a>
+            </div>
+            <table style="width:100%;background-color:#C2BE9E;text-align: center" border="1" cellspacing="1" cellpadding="1">
                 <tr>
-                    <td style="text-align: center;color: red" colspan="10"><h1>订单界面</h1></td>
+                    <td style="text-align: center;color: red" colspan="10"><h1>订单详情界面</h1></td>
+                </tr>
+                <tr>
+                    <td>创建时间：${order.ordertime}</td>
+                    <td colspan="2" style="text-align: left">订单号：${order.oid}</td>
+                    <td>总金额：${order.money}</td>
                 </tr>
                 <tr >
-                    <td>选择</td>
-                    <td>订单编号</td>
-                    <td>收件人</td>
-                    <td>金额</td>
-                    <td>支付状态</td>
-                    <td>配送方式</td>
-                    <td>创建时间</td>
-                    <td>收货地址</td>
-                    <td>创建人</td>
-                    <td>操作</td>
+                    <td>商品图片</td>
+                    <td>商品名称</td>
+                    <td>商品价格</td>
+                    <td>商品简介</td>
                 </tr>
-                <c:forEach items="${orderList}" var="odr">
+                <c:forEach items="${productList}" var="pro">
                     <tr class="pro-tr">
-                        <td style="width: 100px;height: 50px">
-                            <input type="checkbox" class="selectOne"  value="${odr.oid}" name="delBox" style="zoom:180%"/>
+                        <td style="width:300px">
+                            <img src="${pageContext.request.contextPath}/images/${pro.pimage}" style="height: 140px">
+                        </td>
+                        <td style="text-align: center;width:200px">
+                                ${pro.pname}
+                        </td>
+                        <td style="width: 100px">
+                                ${pro.shop_price}
                         </td>
                         <td>
-                                ${odr.oid}
+                                ${pro.pdesc}
                         </td>
-                        <td style="text-align: center">
-                           ${odr.oname}
-                        </td>
-                        <td>
-                                ${odr.money}
-                        </td>
-                        <td>
-                                ${odr.paystatus}
-                        </td>
-                        <td>
-                                ${odr.delivery}
-                        </td>
-                        <td>
-                                ${odr.ordertime}
-                        </td>
-                        <td >
-                                ${odr.address}
-                        </td>
-                        <td>
-                                ${userlogin.username}
-                        </td>
-                        <td>
-                            <a title="删除"   onclick="removeOrder(${odr.oid})">
-                                <i class="layui-btn layui-btn-normal" style="font-size:15px" >删除</i>
-                            </a>
-                            <a title="查看详情"  href="${pageContext.request.contextPath }/order/viewOrder?oid=${odr.oid}" >
-                                <i class="layui-btn layui-btn-normal" style="font-size:15px" >查看详情</i>
-                            </a>
-                        </td>
-                    </tr>
                 </c:forEach>
-                <tr style="height:140px">
-                    <td>
-                        <input type="checkbox" id="select" style="zoom:180%"/>
-                        <br/>全选/全部选
-                    </td>
-                    <td colspan="2">
-                        <a title="删除" onclick="removeOrders()">
-                            <i class="layui-btn layui-btn-normal" style="font-size:15px" >全部删除</i>
-                        </a>
-                    </td>
-                    <td colspan="7">
-                        <span style="text-align: right">
-                             <a title="去支付" href="${pageContext.request.contextPath }/404">
-                            <i class="layui-btn layui-btn-normal" style="font-size:15px" >去支付</i>
-                        </a>
-                        </span>
-                    </td>
-                </tr>
-
             </table>
         </form>
-    </c:if>
-    <c:if test="${orderList.size()==0 }">
-        <div style="text-align: center;margin-top: 250px">
-            <h2><a href="${pageContext.request.contextPath }/product/"  style="color: red" class="myc7">您还没有订单,快去选购吧</a></h2>
-            <br />
-
-        </div>
-    </c:if>
 </div>
 </body>
 <script type="text/javascript">

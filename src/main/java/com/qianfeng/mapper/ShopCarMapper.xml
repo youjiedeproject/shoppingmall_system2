@@ -50,4 +50,13 @@
     <update id="removeOrders" >
         update orders set status=2 where oid=#{oid}
     </update>
+    <select id="viewOrder" resultType="com.qianfeng.model.Order" >
+        select * from orders where oid=#{oid}
+    </select>
+    <select id="viewProduct" resultType="Integer">
+        select pid from order_product where oid=#{oid}
+    </select>
+    <select id="selectProductById" resultType="com.qianfeng.model.Product">
+        select  pid,pname,shop_price,pimage,pdesc from  product where pid=#{pid}
+    </select>
 </mapper>

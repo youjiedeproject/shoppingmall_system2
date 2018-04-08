@@ -5,6 +5,8 @@ import com.qianfeng.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,6 +35,12 @@ public class UserService implements IUserService {
         return pageBean;
     }
     public void insertAll(User user){
+        Date day=new Date();
+        SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = df.format(day);
+        user.setUdate(format);
+        user.setIsadmin("2");
+        user.setStatus("1");
         mapper.insertAll(user);
     }
     public Product selectProductById(Integer pid){

@@ -92,6 +92,7 @@
                             <td style="width: 30%"><h3>库存量</h3></td>
                             <td style="width: 70%"> <h3>${Product.pnumber}</h3></td>
                         </tr>
+                        <c:if test="${userlogin!=null}">
                         <tr>
                             <td style="width: 30%"><h3>加入购物车</h3></td>
                             <td style="width: 70%;text-align: center">
@@ -100,6 +101,7 @@
                                 </a>
                             </td>
                         </tr>
+                        </c:if>
                     </table>
                 <div style="text-align: center">
                 <a title="返回"   onClick="javascript :history.back(-1)">

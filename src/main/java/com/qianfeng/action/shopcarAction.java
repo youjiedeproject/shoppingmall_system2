@@ -83,4 +83,10 @@ public class shopcarAction {
         Integer it = shopcarservice.removeOrders(oids);
         return it;
     }
+
+    @RequestMapping(value="/order/viewOrder",method= RequestMethod.GET)
+    public String  viewOrder(String oid,Model model){
+         shopcarservice.viewOrder(oid,model);
+        return "viewOrder";
+    }
 }

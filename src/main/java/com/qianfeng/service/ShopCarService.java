@@ -8,6 +8,7 @@ import com.qianfeng.model.Product;
 import com.qianfeng.model.ShopCar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
@@ -69,7 +70,7 @@ public class ShopCarService implements IShopCarService {
         }
         Date day=new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-        SimpleDateFormat df2= new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat df2= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String format = df.format(day);
         String format2 = df2.format(day);
         String oid =format+fourRandom;
@@ -122,5 +123,18 @@ public class ShopCarService implements IShopCarService {
              it = shopmapper.removeOrders(oid);
         }
         return it;
+    }
+
+    @Override
+    public void viewOrder(String oid, Model model) {
+        Order order = shopmapper.viewOrder(oid);
+        List<Integer> pidList = shopmapper.viewProduct(oid);
+        List<Product> productList = new ArrayList<>();
+        for (Integer pid: pidList) {
+            Product product = shopmapper.selectProductById(pid);
+            productList.add(product);
+        }
+        model.addAttribute("order",order);
+        model.addAttribute("productList",productList);
     }
 }
